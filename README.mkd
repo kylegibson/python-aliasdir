@@ -1,0 +1,5 @@
+aliasdir
+=
+
+This is a python port of the aliasdir written in ruby by Mutually Human
+
