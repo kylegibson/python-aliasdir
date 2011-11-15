@@ -1,1 +1,5 @@
-VERSION="0.0.1"
+__version__ = "unknown"
+try:
+    from version import __version__
+except ImportError:
+    pass

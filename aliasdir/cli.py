@@ -4,13 +4,15 @@ import os.path
 
 from aliases import Aliases
 
+import version
+
 def main():
     default_alias_file = os.path.expanduser("~/.aliases")
     parser = argparse.ArgumentParser(description="""
     If no arguments are provided, print a list of alias statements
     that can be executed by the shell environment
     """)
-    parser.add_argument('--version', action='version', version="")
+    parser.add_argument('--version', action='version', version=version.__version__)
     parser.add_argument("alias", default=None, nargs="?",
             help="Name of alias")
     parser.add_argument("directory", default=os.getcwd(), nargs="?",
@@ -40,7 +42,7 @@ def main():
         except KeyError:
             print "Error: Alias '%s' does not exist" % args.remove
     elif args.alias:
-        Aliases[args.alias] = args.cwd
+        Aliases[args.alias] = args.directory
     elif args.unalias:
         for alias in sorted(Aliases.aliases.items()):
             print "unalias %s;" % Aliases.quote(alias[0])
