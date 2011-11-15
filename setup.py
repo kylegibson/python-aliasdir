@@ -11,9 +11,8 @@ except ImportError:
 else:
     use_setuptools(download_delay=0)
 
-from setuptools import setup, find_packages
-from distutils.core import setup, Command
-from distutils.command.sdist import sdist as _sdist
+from setuptools import setup, find_packages, Command
+from setuptools.command.sdist import _sdist
 
 rel_file = lambda *args: os.path.join(os.path.dirname(os.path.abspath(__file__)), *args)
 
@@ -30,6 +29,7 @@ def update_version_py():
         print "This does not appear to be a Git repository."
         return
     try:
+        import subprocess
         p = subprocess.Popen(["git", "describe", "--dirty", "--always"],
                              stdout=subprocess.PIPE)
     except EnvironmentError:
@@ -50,14 +50,14 @@ def get_version():
             for line in f.readlines():
                 mo = re.match("__version__ = '([^']+)'", line)
                 if mo:
-                    ver = mo.group(1)
-                    return ver
-    except EnvironmentError:
+                    return mo.group(1)
+            raise RuntimeError("Unable to find version string in %s." % (VERSION_PY,))
+    except IOError:
         pass
     return None
 
 class Version(Command):
-    description = "update version.py from Git repo"
+    description = "update version.py"
     user_options = []
     boolean_options = []
     def initialize_options(self):
@@ -65,8 +65,9 @@ class Version(Command):
     def finalize_options(self):
         pass
     def run(self):
-        update_version_py()
-        print "Version is now", get_version()
+        print get_version()
+        #update_version_py()
+        #print "Version is now", get_version()
 
 class sdist(_sdist):
     def run(self):
@@ -85,6 +86,10 @@ setup_options = dict(
     packages          = find_packages(),
     long_description  = get_readme(),
     install_requires  = get_requirements(),
+    cmdclass          = {
+        'sdist'   : sdist,
+        'version' : Version
+    },
     entry_points      = {
         'console_scripts': 
             ['aliasdir = aliasdir.cli:main']
