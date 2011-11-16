@@ -96,14 +96,16 @@ setup_options = dict(
             ['aliasdir = aliasdir.cli:main']
     },
     classifiers       = [
+        "Development Status :: 4 - Beta",
 		"Environment :: Console",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: POSIX :: Linux",
 		"Operating System :: Unix",
 		"Programming Language :: Python",
 		"Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
-        "Development Status :: 3 - Alpha",
         "Topic :: Utilities",
-        "License :: OSI Approved :: MIT License",
     ],
     zip_safe=False,
 )
