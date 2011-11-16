@@ -1,5 +1,6 @@
 import os
 import os.path
+import re
 
 PKG = "aliasdir"
 VERSION_PY = os.path.join(PKG, "version.py")
@@ -28,21 +29,22 @@ def update_version_py():
     if not os.path.isdir(".git"):
         print "This does not appear to be a Git repository."
         return
+    result = None
     try:
         import subprocess
         p = subprocess.Popen(["git", "describe", "--dirty", "--always"],
                              stdout=subprocess.PIPE)
+        result = p.communicate()[0].strip()
+        if p.returncode != 0:
+            print "git error occurred", p.returncode
+            return
     except EnvironmentError:
         print "unable to run git describe"
         return
-    if p.returncode != 0:
-        print "unable to run git"
-        return
-    result = p.communicate()[0]
     with open(VERSION_PY, "w") as v:
         with open(VERSION_PY+".template") as t:
             v.write(t.read() % result)
-    print "set %s to '%s'" % (VERSION_PY, ver)
+    print "set %s to '%s'" % (VERSION_PY, result)
 
 def get_version():
     try:
@@ -65,9 +67,8 @@ class Version(Command):
     def finalize_options(self):
         pass
     def run(self):
-        print get_version()
-        #update_version_py()
-        #print "Version is now", get_version()
+        update_version_py()
+        print "Version is now", get_version()
 
 class sdist(_sdist):
     def run(self):
