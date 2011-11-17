@@ -1,3 +1,0 @@
-[console_scripts]
-aliasdir = aliasdir.cli:main
-
