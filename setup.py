@@ -33,7 +33,7 @@ def update_version_py():
                              stdout=subprocess.PIPE)
         result = p.communicate()[0].strip()
         if p.returncode == 0:
-            version = result.trim()
+            version = result.strip()
     except EnvironmentError:
         pass
     with open(VERSION_PY, "w") as v:
