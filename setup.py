@@ -18,7 +18,7 @@ from setuptools.command.sdist import _sdist
 rel_file = lambda *args: os.path.join(os.path.dirname(os.path.abspath(__file__)), *args)
 
 def get_readme():
-    return open(rel_file('README.mkd')).read()
+    return open(rel_file('README')).read()
 
 def get_requirements():
     data = open(rel_file('pipfile')).read()
@@ -26,25 +26,19 @@ def get_requirements():
     return filter(None, lines)
 
 def update_version_py():
-    if not os.path.isdir(".git"):
-        print "This does not appear to be a Git repository."
-        return
-    result = None
+    version = "dev"
     try:
         import subprocess
         p = subprocess.Popen(["git", "describe", "--dirty", "--always"],
                              stdout=subprocess.PIPE)
         result = p.communicate()[0].strip()
-        if p.returncode != 0:
-            print "git error occurred", p.returncode
-            return
+        if p.returncode == 0:
+            version = result.trim()
     except EnvironmentError:
-        print "unable to run git describe"
-        return
+        pass
     with open(VERSION_PY, "w") as v:
         with open(VERSION_PY+".template") as t:
-            v.write(t.read() % result)
-    print "set %s to '%s'" % (VERSION_PY, result)
+            v.write(t.read() % version)
 
 def get_version():
     try:
