@@ -1,5 +1,100 @@
-aliasdir
-=
+# aliasdir
 
-This is a python port of the aliasdir written in ruby by Mutually Human
+This is a python port of aliasdir written in ruby by Mutually Human available at https://github.com/mhs/tidbits
 
+## Overview
+
+aliasdir enables you to manage a list of directories as aliases. If you
+have multiple projects, having a shortcut to switch between
+those project directories is very useful.
+
+## Installation
+
+### From development source
+
+    pip install git://github.com/kylegibson/python-aliasdir.git#egg=python-aliasdir
+
+### From download tarball
+
+    pip install aliasdir-X.X.tar.gz
+
+### Post installation configuration
+
+In order to make aliasdir useful, add the following code to the end of your
+.bashrc or equivalent shell execution file:
+
+    function ad {
+        aliasdir $@
+        eval $(aliasdir --dump-alias)
+    }
+    eval $(aliasdir --dump-alias)
+
+With this configuration, you can use 'ad' in place of aliasdir
+
+## Usage
+
+    aliasdir [--remove alias] [--show alias] [--dump-alias]
+                [--dump-unalias] [--alias-file ALIAS_FILE]
+                [alias] [directory]
+    --remove alias            Remove alias if it exists
+    --show alias              Show the value of an alias if it exists
+    --dump-alias              Display a list of alias statements
+    --dump-unalias            Display a list of unalias statements
+    --alias-file ALIAS_FILE   Default is $HOME/.aliases
+
+### Create a new alias
+
+Set the alias "foo" to the path "/home/user/dev/project"
+
+    $ aliasdir foo /home/user/dev/project
+
+Set the alias "foo" to the current directory 
+
+    $ aliasdir foo $(pwd)
+
+or
+
+    $ aliasdir foo
+
+### Display alias
+
+    $ aliasdir --show foo
+    /home/user/dev/project
+
+### Display all aliases
+
+    $ aliasdir 
+    foo        /home/user/dev/project
+    bar        /home/user/dev/bar
+
+### Remove alias
+
+    $ aliasdir --remove foo
+
+### Dump aliases for shell execution
+
+    $ aliasdir --dump-alias
+    alias foo='cd /home/user/dev/project';
+    alias bar='cd /home/user/dev/bar';
+
+This can be executed as `$(aliasdir --dump-alias)`
+
+### Dump un-aliases for shell execution
+
+    $ aliasdir --dump-unalias
+    unalias foo;
+    unalias bar;
+
+This can be executed as `$(aliasdir --dump-unalias)`
+
+### Specify a different alias storage file
+
+Aliases are stored in YAML format, you can change the file that is used to
+store the aliases
+
+    $ aliasdir --alias-file aliases.yaml foo /home/user/dev/project
+    $ aliasdir --alias-file aliases.yaml --show foo
+    /home/user/dev/project
+    $ aliasdir --alias-file aliases.yaml --remove foo
+
+Questions, comments and pull requests are welcome
