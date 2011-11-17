@@ -4,6 +4,11 @@ import re
 
 PKG = "aliasdir"
 VERSION_PY = os.path.join(PKG, "version.py")
+VERSION_TEMPLATE = """# This file is generated from information obtained via git describe 
+# Distribution tarballs contain a pre-generated copy of this file.
+
+__version__ = '%s'
+"""
 
 try:
     from ez_setup import use_setuptools
@@ -25,38 +30,38 @@ def get_requirements():
     lines = map(lambda s: s.strip(), data.splitlines())
     return filter(None, lines)
 
-def update_version_py():
-    version = "dev"
+def git_describe():
     try:
         import subprocess
         p = subprocess.Popen(["git", "describe", "--dirty", "--always"],
                              stdout=subprocess.PIPE)
         result = p.communicate()[0].strip()
         if p.returncode == 0:
-            version = result.strip()
+            return result.strip()
     except EnvironmentError:
         pass
-    with open(VERSION_PY, "w") as v:
-        with open(VERSION_PY+".template") as t:
-            v.write(t.read() % version)
+    return None
 
-def get_version():
+def read_version_from_version_module():
     try:
         with open(VERSION_PY) as f:
             for line in f.readlines():
                 mo = re.match("__version__ = '([^']+)'", line)
                 if mo:
                     return mo.group(1)
-            raise RuntimeError("Unable to find version string in %s." % (VERSION_PY,))
     except IOError:
         pass
-    return None
+    return "dev"
 
-update_version_py()
+if os.path.isdir(".git"):
+    version = git_describe()
+    if version:
+        with open(VERSION_PY, "w") as v:
+            v.write(VERSION_TEMPLATE % version)
 
 setup_options = dict(
     name              = PKG,
-    version           = get_version(),
+    version           = read_version_from_version_module(),
     author            = "Kyle Gibson",
     author_email      = "kyle.gibson@frozenonline.com",
     description       = "Easy way to save your directories",

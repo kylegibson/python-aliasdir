@@ -1,0 +1,17 @@
+LICENSE
+MANIFEST.in
+README
+README.mkd
+pipfile
+setup.py
+aliasdir/__init__.py
+aliasdir/aliases.py
+aliasdir/cli.py
+aliasdir/version.py
+aliasdir.egg-info/PKG-INFO
+aliasdir.egg-info/SOURCES.txt
+aliasdir.egg-info/dependency_links.txt
+aliasdir.egg-info/entry_points.txt
+aliasdir.egg-info/not-zip-safe
+aliasdir.egg-info/requires.txt
+aliasdir.egg-info/top_level.txt
