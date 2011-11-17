@@ -52,23 +52,7 @@ def get_version():
         pass
     return None
 
-class Version(Command):
-    description = "update version.py"
-    user_options = []
-    boolean_options = []
-    def initialize_options(self):
-        pass
-    def finalize_options(self):
-        pass
-    def run(self):
-        update_version_py()
-        print "Version is now", get_version()
-
-class sdist(_sdist):
-    def run(self):
-        update_version_py()
-        self.distribution.metadata.version = get_version()
-        return _sdist.run(self)
+update_version_py()
 
 setup_options = dict(
     name              = PKG,
@@ -81,10 +65,6 @@ setup_options = dict(
     packages          = find_packages(),
     long_description  = get_readme(),
     install_requires  = get_requirements(),
-    cmdclass          = {
-        'sdist'   : sdist,
-        'version' : Version
-    },
     entry_points      = {
         'console_scripts': 
             ['aliasdir = aliasdir.cli:main']
