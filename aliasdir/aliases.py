@@ -1,6 +1,6 @@
 import yaml
-
 import pipes
+from __future__ import with_statement
 
 class MetaAliases(type):
     def __getitem__(self, k):

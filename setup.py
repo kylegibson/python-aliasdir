@@ -1,6 +1,7 @@
 import os
 import os.path
 import re
+from __future__ import with_statement
 
 PKG = "aliasdir"
 VERSION_PY = os.path.join(PKG, "version.py")
@@ -83,6 +84,7 @@ setup_options = dict(
 		"Operating System :: Unix",
 		"Programming Language :: Python",
 		"Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
         "Topic :: Utilities",
     ],
