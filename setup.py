@@ -1,7 +1,7 @@
+from __future__ import with_statement
 import os
 import os.path
 import re
-from __future__ import with_statement
 
 PKG = "aliasdir"
 VERSION_PY = os.path.join(PKG, "version.py")
