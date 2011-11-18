@@ -1,1 +1,1 @@
-include README.mkd LICENSE pipfile
+include README* LICENSE pipfile
