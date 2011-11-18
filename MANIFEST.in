@@ -1,1 +1,1 @@
-include README* LICENSE pipfile
+include README README.html LICENSE pipfile
